@@ -7,5 +7,11 @@ Specyfikacja:
     porównanie własnej sprawności fizycznej z innymi użytkownikami
     system minutników usprawniających ćwiczenia
 
-ToDo:
-- możliwość dodania nowego treningu i nowego ćwiczenia. dane zapisują się w pamięci
+Raport 3 :
+Changelog:
+- zrobione menu główne
+- dodanie klas obsługujących ładowanie zdjęć i trzymających dane ćwiczeń
+Todo:
+- możliwość dodania nowego treningu i nowego ćwiczenia.
+
+

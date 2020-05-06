@@ -1,16 +1,16 @@
-package fa.fitapp.ui.gallery;
+package fa.fitapp.ui.training;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class GalleryViewModel extends ViewModel {
+public class TrainingViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public GalleryViewModel() {
+    public TrainingViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Exercises gallery");
+        mText.setValue("This is slideshow fragment");
     }
 
     public LiveData<String> getText() {

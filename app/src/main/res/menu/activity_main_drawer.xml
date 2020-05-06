@@ -6,33 +6,36 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/exercises" />
+            android:id="@+id/nav_exercises"
+            android:icon="@drawable/ic_menu_exercises"
+            android:title="@string/exercises"/>
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/nav_workout"
+            android:icon="@drawable/ic_menu_training"
+            android:title="@string/menu_workout"/>
         <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_menu_history"
+            android:title="@string/menu_history"/>
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="@string/communicate">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_send" />
+                android:id="@+id/nav_compare"
+                android:icon="@drawable/ic_menu_compare"
+                android:title="@string/menu_compare" />
         </menu>
     </item>
-
+    <item android:title="@string/settings">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_menu_settings"
+                android:title="@string/menu_settings" />
+        </menu>
+    </item>
 </menu>
