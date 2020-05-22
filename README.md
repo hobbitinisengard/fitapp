@@ -8,10 +8,17 @@ Specyfikacja:
     system minutników usprawniających ćwiczenia
 
 Raport 3 :
+
 Changelog:
 - zrobione menu główne
 - dodanie klas obsługujących ładowanie zdjęć i trzymających dane ćwiczeń
 Todo:
 - możliwość dodania nowego treningu i nowego ćwiczenia.
 
+Raport 4:
+Changelog
+- Poprawa wyglądu aplikacji
+
+Todo:
+- możliwość dodania nowego treningu i nowego ćwiczenia
 

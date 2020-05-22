@@ -15,6 +15,18 @@ import java.io.IOException;
 
 /**
  * Created by Ilya Gazman on 3/6/2016.
+ * To Save
+ * new ImageSaver(context).
+ *         setFileName("myImage.png").
+ *         setDirectoryName("images").
+ *         save(bitmap);
+ *
+ * To load:
+ *
+ * Bitmap bitmap = new ImageSaver(context).
+ *         setFileName("myImage.png").
+ *         setDirectoryName("images").
+ *         load();
  */
 public class ImageSaver {
 
