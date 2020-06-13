@@ -18,9 +18,10 @@
     <string name="author_name">Jakub Żywicki</string>
     <string name="menu_workout">Workouts</string>
     <string name="menu_settings">Settings</string>
-    <string name="menu_history">Track record</string>
+    <string name="menu_history">Track records</string>
     <string name="settings">Settings</string>
     <string name="communicate">Communicate</string>
-    <string name="menu_compare">Global records</string>
+    <string name="menu_compare">History</string>
     <string name="menu_exercises">Exercise database</string>
+    <string name="date_example">12/03/2020 19:38</string>
 </resources>
