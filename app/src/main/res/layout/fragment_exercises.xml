@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,4 +17,57 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_gallery">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/bChest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chest" />
+
+            <Button
+                android:id="@+id/bBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Back" />
+
+            <Button
+                android:id="@+id/bShoulder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shoulders" />
+
+            <Button
+                android:id="@+id/bBiceps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Biceps" />
+
+            <Button
+                android:id="@+id/bTriceps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Triceps" />
+
+            <Button
+                android:id="@+id/bLegsBuns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Legs and buns" />
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

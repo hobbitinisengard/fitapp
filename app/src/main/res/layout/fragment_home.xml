@@ -3,45 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <TextView
-        android:id="@+id/user_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:text="Jakub Żywicki" />
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="131dp"
-        android:layout_height="146dp"
+        android:layout_width="156dp"
+        android:layout_height="156dp"
         android:layout_marginTop="64dp"
         android:contentDescription="TODO"
         android:scaleType="fitStart"
+        android:src="@drawable/face"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/face" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/t_const_last"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Last training:"
         app:layout_constraintEnd_toStartOf="@+id/t_lastTrainingDate"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_name"
-        tools:text="Last training:" />
+        app:layout_constraintTop_toBottomOf="@+id/user_name" />
 
     <TextView
         android:id="@+id/t_lastTrainingDate"
@@ -49,28 +34,44 @@
         android:layout_height="wrap_content"
         android:text="@string/date_example"
         app:layout_constraintBaseline_toBaselineOf="@+id/t_const_last"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/t_const_last" />
+        app:layout_constraintStart_toEndOf="@+id/t_const_last"
+        app:layout_constraintStart_toStartOf="@+id/editTextNumberDecimal" />
 
     <TextView
         android:id="@+id/t_const_weight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:text="Weight (kg):"
         app:layout_constraintStart_toStartOf="@+id/t_const_last"
-        app:layout_constraintTop_toBottomOf="@+id/t_const_last"
-        tools:text="Weight (kg):" />
+        app:layout_constraintTop_toBottomOf="@+id/t_const_last" />
 
     <EditText
         android:id="@+id/editTextNumberDecimal"
-        android:layout_width="113dp"
-        android:layout_height="22dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
         android:layout_marginTop="8dp"
         android:autofillHints="70"
         android:ems="10"
         android:inputType="numberDecimal"
+        android:text="123"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/t_lastTrainingDate"
+        app:layout_constraintStart_toEndOf="@+id/t_const_weight"
         app:layout_constraintTop_toBottomOf="@+id/t_lastTrainingDate" />
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#FFFFFF"
+        android:backgroundTintMode="add"
+        android:text="@string/author_name"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,16 +4,16 @@ import android.graphics.Bitmap;
 
 public class Exercise {
     public String Name;
-    public Author Author;
+    public String Author;
     public ExerciseType Type;
     public String Description;
-    public Bitmap Image;
-    Exercise(String name, ExerciseType type, String description, Bitmap img){
+    public String Url;
+    Exercise(String name, ExerciseType type, String description, String video_url, String author){
         Name = name;
-        Author = fa.fitapp.ui.exercises.Author.standard;
+        Author = author;
         Type = type;
         Description = description;
-        Image = img;
+        Url = video_url;
     }
 
 }

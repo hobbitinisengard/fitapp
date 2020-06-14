@@ -12,7 +12,7 @@ public class ExercisesViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Exercise>> mExercises;
     public ExercisesViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Exercises gallery");
+        mText.setValue("Exercises library");
     }
 
     public LiveData<String> getText() {
