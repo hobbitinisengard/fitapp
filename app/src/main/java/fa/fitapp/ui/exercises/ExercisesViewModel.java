@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
+import fa.fitapp.Exercise;
+
 public class ExercisesViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;

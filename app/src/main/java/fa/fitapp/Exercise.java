@@ -1,8 +1,7 @@
-package fa.fitapp.ui.exercises;
-
-import android.graphics.Bitmap;
+package fa.fitapp;
 
 public class Exercise {
+    public long Id;
     public String Name;
     public String Author;
     public ExerciseType Type;
@@ -15,5 +14,12 @@ public class Exercise {
         Description = description;
         Url = video_url;
     }
-
+    Exercise(long Id, String name, ExerciseType type, String description, String video_url, String author){
+        this.Id = Id;
+        Name = name;
+        Author = author;
+        Type = type;
+        Description = description;
+        Url = video_url;
+    }
 }

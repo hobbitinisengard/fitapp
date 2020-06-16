@@ -1,3 +1,3 @@
-package fa.fitapp.ui.exercises;
+package fa.fitapp;
 
 public enum ExerciseType {chest, back, shoulder, biceps, triceps, legs_buns}

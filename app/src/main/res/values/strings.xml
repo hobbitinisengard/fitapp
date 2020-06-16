@@ -25,4 +25,8 @@
     <string name="menu_exercises">Exercise database</string>
     <string name="date_example">12/03/2020 19:38</string>
     <string name="user_name">Jakub Zywicki</string>
+    <string name="exercise_name">Exercise Name</string>
+    <string name="author">Author:</string>
+    <string name="show_video">show video</string>
+    <string name="description">Description</string>
 </resources>

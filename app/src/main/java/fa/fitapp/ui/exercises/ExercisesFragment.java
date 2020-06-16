@@ -8,13 +8,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
+import fa.fitapp.ExerciseType;
 import fa.fitapp.R;
+import fa.fitapp.ExerciseListActivity;
 
 public class ExercisesFragment extends Fragment {
 
@@ -77,7 +76,7 @@ public class ExercisesFragment extends Fragment {
         return root;
     }
     private void ToExerciseActivity(View v, ExerciseType ET) {
-        Intent i = new Intent(getContext(), ExerciseListActivity.class);
+        Intent i = new Intent(getActivity(), ExerciseListActivity.class);
         i.putExtra("ExerciseType", ET);
         startActivity(i);
     }

@@ -1,8 +1,7 @@
-package fa.fitapp.ui.exercises;
+package fa.fitapp;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -15,8 +14,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-
-import fa.fitapp.R;
 
 public class ExerciseListRecyclerAdapter extends RecyclerView.Adapter<ExerciseListRecyclerAdapter.ViewHolder> {
 
@@ -60,10 +57,11 @@ public class ExerciseListRecyclerAdapter extends RecyclerView.Adapter<ExerciseLi
             }
         });
     }
+
     public static void watchYoutubeVideo(Context context, String id){
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(id));
         Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=" + id));
+                Uri.parse(id));
         try {
             context.startActivity(appIntent);
         } catch (ActivityNotFoundException ex) {
@@ -95,7 +93,9 @@ public class ExerciseListRecyclerAdapter extends RecyclerView.Adapter<ExerciseLi
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onItemClick(view, getAdapterPosition());
+
         }
     }
 
@@ -105,7 +105,7 @@ public class ExerciseListRecyclerAdapter extends RecyclerView.Adapter<ExerciseLi
     }
 
     // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

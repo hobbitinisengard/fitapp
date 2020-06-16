@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tNewExName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NewExerciseName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etSeries"
+        android:layout_width="125dp"
+        android:layout_height="41dp"
+        android:ems="10"
+        android:hint="Reps number"
+        android:inputType="numberDecimal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tNewExName" />
+
+    <EditText
+        android:id="@+id/etBreaks"
+        android:layout_width="126dp"
+        android:layout_height="42dp"
+        android:ems="10"
+        android:hint="Series number"
+        android:inputType="numberDecimal"
+        app:layout_constraintBaseline_toBaselineOf="@+id/etSeries"
+        app:layout_constraintStart_toEndOf="@+id/etSeries" />
+
+    <CheckBox
+        android:id="@+id/cbAddExercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Add?"
+        app:layout_constraintBottom_toBottomOf="@+id/etBreaks"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

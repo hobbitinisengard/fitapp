@@ -6,11 +6,11 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tExerciseName"
+        android:id="@+id/tTrainingName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
-        android:text="@string/exercise_name"
+        android:text="Workout Name"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -18,44 +18,60 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/bOpenVideo"
+        android:id="@+id/bList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="8dp"
-        android:text="@string/show_video"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/const_textView"
+        android:text="Show exercises"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tExerciseName" />
+        app:layout_constraintTop_toBottomOf="@+id/tTrainingName" />
 
     <TextView
         android:id="@+id/const_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/author"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bOpenVideo" />
+        android:layout_marginStart="8dp"
+        android:text="Author:"
+        app:layout_constraintBottom_toBottomOf="@+id/bList"
+        app:layout_constraintStart_toEndOf="@+id/bList" />
+
+    <TextView
+        android:id="@+id/const_textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Type:"
+        app:layout_constraintStart_toEndOf="@+id/bList"
+        app:layout_constraintTop_toTopOf="@+id/bList" />
+
+    <TextView
+        android:id="@+id/tTypes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:text="triceps"
+        app:layout_constraintBaseline_toBaselineOf="@+id/const_textView2"
+        app:layout_constraintStart_toEndOf="@+id/const_textView2" />
 
     <TextView
         android:id="@+id/tAuthorName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="@string/fitapp"
+        android:text="fitapp"
         app:layout_constraintBaseline_toBaselineOf="@+id/const_textView"
         app:layout_constraintStart_toEndOf="@+id/const_textView" />
 
     <Button
-        android:id="@+id/bDescription"
+        android:id="@+id/bStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:text="@string/description"
-        app:layout_constraintBaseline_toBaselineOf="@+id/bOpenVideo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/bOpenVideo" />
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="#4CAF50"
+        android:text="start workout!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
