@@ -26,8 +26,8 @@ public class FitAppDBAdapter {
 
             if(!doesDatabaseExist(context, "Fitapp")) {
                 // feed data
-                insertUser("fitapp", (byte) 0);
-                insertUser("Kuba", (byte) 83);
+                insertUser("fitapp", (byte) 0, "00/00/0000");
+                insertUser("Kuba", (byte) 83, "16/05/2019");
                 insertNewExercise(new Exercise("Lunges with dumbbells", ExerciseType.legs_buns, "The lunge is basically a giant step forward. Although the lunge exercise can be done without weights, a lunge with weights such as dumbbells provides additional work for the upper leg muscles and the muscles of the buttocks. Lunges with weights require good balance, so if you have issues keeping your balance, start off by doing the exercise without weights as you learn the proper form. This functional exercise is a great addition to any lower body strengthening routine as well as circuit training workouts. ", "https://www.youtube.com/watch?v=fqymGym7YL0", "Kuba"));
                 insertNewExercise(new Exercise("45 Degree Leg Press", ExerciseType.legs_buns, "The 45-degree leg press machine is an outstanding compound push exercise to target the quadriceps and glutes. This plate-loaded machine can be found in even the most hardcore gyms, using a lever or sled apparatus to hold the weight.", "https://www.youtube.com/watch?v=OqjdUTh-GEE", "Kuba"));
                 insertNewExercise(new Exercise("Barbell Lunge", ExerciseType.legs_buns, "The barbell forward lunge is a popular lower-body exercise targeting the quads, glutes, and hamstrings. Using a barbell allows you to overload the exercise beyond body weight and perform the movement in strength or muscle-focused rep ranges. The forward lunge can be performed as part of a barbell complex, in a circuit, or on its own in the lower-body portion of any workout.", "https://www.youtube.com/watch?v=pEN-dCjh5cQ", "fitapp"));
@@ -60,31 +60,32 @@ public class FitAppDBAdapter {
                                 new ExerciseSet(8, 8, 3),
                                 new ExerciseSet(9, 10, 5),
                         }));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 1,1), (byte)10));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 2,1), (byte)10));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 3,13), (byte)10));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 1,5), (byte)11));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 1,1), (byte)12));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 1,7), (byte)12));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 1,15), (byte)14));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 1,29), (byte)13));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 1,5), (byte)15));
-                insertExerciseRecord(new ExerciseRecord(1, new Date(2020, 1,3), (byte)15));
+                insertExerciseRecord(new ExerciseRecord(3, "01/12/2018", (byte)10));
+                insertExerciseRecord(new ExerciseRecord(3, "01/01/2019", (byte)10));
+                insertExerciseRecord(new ExerciseRecord(3, "01/02/2019", (byte)10));
+                insertExerciseRecord(new ExerciseRecord(3, "01/03/2019", (byte)11));
+                insertExerciseRecord(new ExerciseRecord(3, "01/04/2019", (byte)12));
+                insertExerciseRecord(new ExerciseRecord(3, "01/05/2019", (byte)12));
+                insertExerciseRecord(new ExerciseRecord(3, "01/06/2019", (byte)14));
+                insertExerciseRecord(new ExerciseRecord(3, "01/07/2019", (byte)13));
+                insertExerciseRecord(new ExerciseRecord(3, "01/08/2019", (byte)15));
+                insertExerciseRecord(new ExerciseRecord(3, "01/09/2019", (byte)15));
             }
         }
 
     }
+
     private static boolean doesDatabaseExist(Context context, String dbName) {
         File dbFile = context.getDatabasePath(dbName);
         return dbFile.exists();
     }
-    public long insertUser(String name, byte weight) {
+    public void insertUser(String name, byte weight, String dateString) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("Name", name);
         contentValues.put("Weight", weight);
-        long id = db.insert("USER", null , contentValues);
-        return id;
+        contentValues.put("LastWorkout", dateString);
+        db.insert("USER", null , contentValues);
     }
     public long GetAuthorID(String Author)
     {
@@ -92,7 +93,9 @@ public class FitAppDBAdapter {
         String[] columns = {"_id", "Name"};
         Cursor cursor = db.query("USER", columns, "Name = ?", new String[]{Author}, null,null,null);
         cursor.moveToNext();
-        return cursor.getLong(cursor.getColumnIndex("_id"));
+        long id = cursor.getLong(cursor.getColumnIndex("_id"));
+        cursor.close();
+        return id;
     }
     public String GetAuthorName(long UserId)
     {
@@ -100,9 +103,11 @@ public class FitAppDBAdapter {
         String[] columns = {"_id", "Name"};
         Cursor cursor = db.query("USER", columns, "_id = ?", new String[]{String.valueOf(UserId)}, null,null,null);
         cursor.moveToNext();
-        return cursor.getString(cursor.getColumnIndex("Name"));
+        String name =cursor.getString(cursor.getColumnIndex("Name"));
+        cursor.close();
+        return name;
     }
-    public long insertNewExercise(Exercise e) {
+    public void insertNewExercise(Exercise e) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("Name", e.Name);
@@ -110,8 +115,7 @@ public class FitAppDBAdapter {
         contentValues.put("Description", e.Description);
         contentValues.put("Link", e.Url);
         contentValues.put("Type", e.Type.toString());
-        long id = db.insert("EXERCISE", null , contentValues);
-        return id;
+        db.insert("EXERCISE", null , contentValues);
     }
     public void insertExerciseRecord(ExerciseRecord er){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -130,10 +134,11 @@ public class FitAppDBAdapter {
     }
 
 
-    public ArrayList<Exercise> GetExercises(ExerciseType exerciseType) {
+
+   public ArrayList<Exercise> GetExercises(ExerciseType exerciseType) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor =db.query("EXERCISE",null,"Type=?",new String[]{exerciseType.toString()},null,null,null);
-        ArrayList<Exercise> to_return = new ArrayList<Exercise>();
+        ArrayList<Exercise> to_return = new ArrayList<>();
         while (cursor.moveToNext())
         {
             long cid =cursor.getLong(cursor.getColumnIndex("_id"));
@@ -145,6 +150,7 @@ public class FitAppDBAdapter {
 
             to_return.add(new Exercise(cid, name, type, description, link, author));
         }
+        cursor.close();
         return to_return;
     }
     public ArrayList<Exercise> GetExercises() {
@@ -162,6 +168,7 @@ public class FitAppDBAdapter {
 
             to_return.add(new Exercise(cid, name, type, description, link, author));
         }
+        cursor.close();
         return to_return;
     }
 
@@ -175,6 +182,7 @@ public class FitAppDBAdapter {
         String author = cursor.getString(cursor.getColumnIndex("Author"));
         String link = cursor.getString(cursor.getColumnIndex("Link"));
         ExerciseType type = ExerciseType.valueOf(cursor.getString(cursor.getColumnIndex("Type")));
+        cursor.close();
         return new Exercise(cid, name, type, description, link, author);
     }
     public void UpdateExercise(Exercise e) {
@@ -240,15 +248,24 @@ public class FitAppDBAdapter {
     }
 
 
-    private String getNow() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Date date = new Date();
-        return dateFormat.format(date);
+    public String getNow() {
+        Date today = new Date(); // Fri Jun 17 14:54:28 PDT 2016
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(today); // don't forget this if date is arbitrary e.g. 01-01-2014
+        String Day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+        if(Day.length() == 1)
+            Day = "0"+Day;
+        String Month = String.valueOf(cal.get(Calendar.MONTH));
+        if(Month.length() == 1)
+            Month = "0"+Month;
+        String Year = String.valueOf(cal.get(Calendar.YEAR));
+        return Day + "/" + Month + "/" + Year;
     }
+
     public ArrayList<Workout> GetWorkouts() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor =db.query("WORKOUT",null,null, null,null,null,null);
-        ArrayList<Workout> workoutArray = new ArrayList<Workout>();
+        ArrayList<Workout> workoutArray = new ArrayList<>();
         while (cursor.moveToNext())
         {
             long cid =cursor.getLong(cursor.getColumnIndex("_id"));
@@ -268,6 +285,7 @@ public class FitAppDBAdapter {
         for(int i=0; i<workoutArray.size(); i++){
             SetWorkoutDescriptionStrings(workoutArray.get(i));
         }
+        cursor.close();
         return workoutArray;
     }
     public void SetWorkoutDescriptionStrings(Workout w){
@@ -292,6 +310,7 @@ public class FitAppDBAdapter {
             String name = cursor.getString(cursor.getColumnIndex("Name"));
             to_return.add(new WorkoutExerciseSet(cid, name, 0,0));
         }
+        cursor.close();
         return to_return;
     }
     public ArrayList<WorkoutExerciseSet> GetNewExerciseActivities(long WorkoutID) {
@@ -306,6 +325,7 @@ public class FitAppDBAdapter {
             to_return.add(new WorkoutExerciseSet(cid, name, 0,0));
         }
         SetSeriesBreaksAndTicks(to_return, WorkoutID);
+        cursor.close();
         return to_return;
     }
     private void SetSeriesBreaksAndTicks(ArrayList<WorkoutExerciseSet> sets, long WorkoutID){
@@ -318,11 +338,9 @@ public class FitAppDBAdapter {
                 if(wes.Series != 0 && wes.Breaks != 0)
                     wes.isSelected = true;
             }
+            cursor.close();
         }
-    }
-    private Date GetDate(String date) throws ParseException {
-        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return parser.parse(date);
+
     }
     public void AddWorkoutToHistory(long workoutID, int score){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -341,7 +359,7 @@ public class FitAppDBAdapter {
         db.insert("EXERCISE_HISTORY", null , contentValues);
     }
 
-    public ArrayList<ExerciseRecord> GetExerciseRecords(long exID) throws ParseException {
+    public ArrayList<ExerciseRecord> GetExerciseRecords(long exID) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor =db.query("EXERCISE_HISTORY",null,"ExerciseID=?",new String[]{String.valueOf(exID)},null,null,null);
         ArrayList<ExerciseRecord> to_return = new ArrayList<>();
@@ -349,15 +367,16 @@ public class FitAppDBAdapter {
         {
             long cid =cursor.getLong(cursor.getColumnIndex("_id"));
             long ExID = cursor.getLong(cursor.getColumnIndex("ExerciseID"));
-            Date date =GetDate(cursor.getString(cursor.getColumnIndex("Date")));
+            String date =cursor.getString(cursor.getColumnIndex("Date"));
             byte Load = (byte)cursor.getInt(cursor.getColumnIndex("Load"));
 
             to_return.add(new ExerciseRecord(cid, ExID, date, Load));
         }
+        cursor.close();
         return to_return;
     }
 
-    public ArrayList<WorkoutRecord> GetWorkoutRecords(long workoutID) throws ParseException {
+    public ArrayList<WorkoutRecord> GetWorkoutRecords(long workoutID){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor =db.query("WORKOUT_HISTORY",null,"WorkoutID=?",new String[]{String.valueOf(workoutID)},null,null,null);
         ArrayList<WorkoutRecord> to_return = new ArrayList<>();
@@ -368,10 +387,28 @@ public class FitAppDBAdapter {
             String date =cursor.getString(cursor.getColumnIndex("Date"));
             int Score = cursor.getInt(cursor.getColumnIndex("Score"));
 
-            to_return.add(new WorkoutRecord(cid, WorkoutID, GetDate(date), Score));
+            to_return.add(new WorkoutRecord(cid, WorkoutID, date, Score));
         }
+        cursor.close();
         return to_return;
     }
+
+    public String GetLastTrainingDate(long UserID) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor =db.query("USER",null,"_id=?",new String[]{String.valueOf(UserID)},null,null,null);
+        cursor.moveToNext();
+        String LastDate = cursor.getString(cursor.getColumnIndex("LastWorkout"));
+        cursor.close();
+        return LastDate;
+    }
+    public void SetLastTrainingDate(long UserID, Date date) {
+        String dateString = date.getDate() + "/" + (date.getMonth()+1) + "/" + (1900+date.getYear());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("LastWorkout", dateString);
+        db.update("USER", contentValues, "_id=?", new String[]{String.valueOf(UserID)});
+    }
+
 
     static class MyDBHelper extends SQLiteOpenHelper
     {
@@ -379,7 +416,7 @@ public class FitAppDBAdapter {
         private static final int DATABASE_Version = 1;
 
         private static final String CREATE_TABLE_USERS = "CREATE TABLE USER (_id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                "Name VARCHAR(128) UNIQUE, Weight TINYINT, LastWorkout DATETIME);";
+                "Name VARCHAR(128) UNIQUE, Weight TINYINT, LastWorkout VARCHAR(10));";
 
         private static final String CREATE_TABLE_EXERCISES = "CREATE TABLE EXERCISE (_id INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 "Name VARCHAR(255), Description VARCHAR(1024), Author INTEGER NOT NULL REFERENCES USER(_id), Type VARCHAR(32), Link VARCHAR(255));";
@@ -391,10 +428,10 @@ public class FitAppDBAdapter {
                 "WorkoutID INTEGER NOT NULL REFERENCES WORKOUT(_id), ExID INTEGER NOT NULL REFERENCES EXERCISE(_id), Series TINYINT, Breaks TINYINT);";
 
         private static final String CREATE_TABLE_WORKOUTS_DONE = "CREATE TABLE WORKOUT_HISTORY (_id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                "WorkoutID INTEGER NOT NULL REFERENCES WORKOUT(_id), Date TIMESTAMP, Score INT);";
+                "WorkoutID INTEGER NOT NULL REFERENCES WORKOUT(_id), Date VARCHAR(10), Score INT);";
 
         private static final String CREATE_TABLE_EXERCISE_RECORDS = "CREATE TABLE EXERCISE_HISTORY (_id INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                "ExerciseID INTEGER NOT NULL REFERENCES EXERCISE(_id), Date TIMESTAMP, Load TINYINT);";
+                "ExerciseID INTEGER NOT NULL REFERENCES EXERCISE(_id), Date VARCHAR(10), Load TINYINT);";
 
         private Context context;
 

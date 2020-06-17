@@ -28,7 +28,13 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.Objects;
+
+import javax.xml.datatype.Duration;
 
 import fa.fitapp.AddNewExerciseActivity;
 import fa.fitapp.Exercise;
@@ -43,14 +49,12 @@ import fa.fitapp.R;
 public class HistoryFragment extends Fragment implements ExerciseRecordRecyclerAdapter.ItemClickListener {
 
     ExerciseRecordRecyclerAdapter adapter;
-    ExerciseType exerciseType;
-    Toolbar mTopToolbar;
-    FloatingActionButton bNewExercise;
     FitAppDBAdapter dbAdapter;
     GraphView graph;
-
+    View root;
+    long lastId = 0;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_history, container, false);
+        root = inflater.inflate(R.layout.fragment_history, container, false);
         dbAdapter = new FitAppDBAdapter(getContext());
 
         super.onCreate(savedInstanceState);
@@ -67,21 +71,33 @@ public class HistoryFragment extends Fragment implements ExerciseRecordRecyclerA
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
+        if(savedInstanceState != null)
+            GetDataAndDrawGraph(savedInstanceState.getLong("lastId"));
         return root;
     }
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("lastId", lastId);
+    }
     @Override
     public void onItemClick(View view, int position) throws ParseException {
         Exercise e = adapter.getItem(position);
-        ArrayList<ExerciseRecord> Records = dbAdapter.GetExerciseRecords(e.Id);
-        if(Records.size() != 0)
-            Toast.makeText(, )
+        GetDataAndDrawGraph(e.Id);
+    }
+    void GetDataAndDrawGraph(long Id){
+        ArrayList<ExerciseRecord> Records = dbAdapter.GetExerciseRecords(Id);
+        lastId = Id;
+        Collections.sort(Records);
+        if(Records.isEmpty())
+            Toast.makeText(root.getContext(), "No data", Toast.LENGTH_SHORT).show();
         ArrayList<DataPoint> Points = new ArrayList<>();
-        for (ExerciseRecord r : Records) {
-            Points.add(new DataPoint(r.date, r.Load));
+        for(int i=0; i<Records.size(); i++){
+            Points.add(new DataPoint(i+1, Records.get(i).Load));
         }
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(Points.toArray(new DataPoint[Points.size()]));
         graph.removeAllSeries();
+        graph.setScaleX(1);
         graph.addSeries(series);
     }
 }

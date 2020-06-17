@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -19,9 +18,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
+import java.util.Date;
 
 public class WorkoutInProgress extends AppCompatActivity {
     Exercise CurrentExercise;
@@ -47,12 +44,14 @@ public class WorkoutInProgress extends AppCompatActivity {
     //Declare timer
     CountDownTimer GlobalTimer = null;
     CountDownTimer LocalTimer = null;
-    private long LastGlobalTimerPosition;
+    long GlobalTimerValue = 0;
+    long LocalTimerValue = 0;
+    boolean BreakMode = false;
     byte[] kg_loads;
     void StartGlobalTimer(long millisInFuture) {
         GlobalTimer = new CountDownTimer(millisInFuture, 1000) {
             public void onTick(long millisUntilFinished) {
-                LastGlobalTimerPosition = millisUntilFinished;
+                GlobalTimerValue = millisUntilFinished;
                 millisUntilFinished/=1000;
                 int seconds = (int) (millisUntilFinished%60);
                 int minutes = (int) (millisUntilFinished/60);
@@ -61,13 +60,13 @@ public class WorkoutInProgress extends AppCompatActivity {
             public void onFinish() {
                 tRemainingTime.setText("0:0");
             }
-
         };
         GlobalTimer.start();
     }
-    void StartExerciseTimer() {
-        LocalTimer = new CountUpTimer(MaxTime*60000) {
+    void StartExerciseTimer(long AdditionalTime) {
+        LocalTimer = new CountUpTimer(MaxTime*60000, AdditionalTime) {
             public void onTick(int second) {
+                LocalTimerValue = second*1000;
                 int seconds = second%60;
                 int minutes = second/60;
                 tExerBreakCounter.setText(minutes+":"+seconds);
@@ -75,10 +74,13 @@ public class WorkoutInProgress extends AppCompatActivity {
         };
         LocalTimer.start();
     }
-    void StopExerciseTimerStartBreakTimer(int millisInFuture) {
-        LocalTimer.cancel();
+    void StopExerciseTimerStartBreakTimer(long millisInFuture) {
+        if(LocalTimer != null)
+            LocalTimer.cancel();
+
         LocalTimer = new CountDownTimer(millisInFuture, 1000) {
             public void onTick(long millisUntilFinished) {
+                LocalTimerValue = millisUntilFinished;
                 millisUntilFinished/=1000;
                 int seconds = (int) (millisUntilFinished%60);
                 int minutes = (int) (millisUntilFinished/60);
@@ -91,6 +93,14 @@ public class WorkoutInProgress extends AppCompatActivity {
             }
         };
         LocalTimer.start();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong("BigCounter", GlobalTimerValue);
+        outState.putLong("SmolCounter", LocalTimerValue);
+        outState.putBoolean("BreakMode", BreakMode);
+        outState.putBoolean("Autoplay", Autoplay);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +125,7 @@ public class WorkoutInProgress extends AppCompatActivity {
         bEndWorkout = findViewById(R.id.bEndWorkout);
         cbAutoplayWorkout = findViewById(R.id.cbAutoplayWorkout);
         bNextExercise = findViewById(R.id.bNextExercise);
-        if(kg_loads == null){
-            kg_loads = new byte[workout.Exercises.length];
-        }
-        // before first exercise start global time
-        StartGlobalTimer(MaxTime*60000);
-        // run exercise timer every new exercise
-        StartExerciseTimer();
+
         cbAutoplayWorkout.setChecked(Autoplay);
         cbAutoplayWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,10 +142,8 @@ public class WorkoutInProgress extends AppCompatActivity {
             public void onClick(View v) {
                 if(TextUtils.isEmpty(etLoad.getText().toString()))
                     return;
-                bNextExercise.setVisibility(View.VISIBLE);
-                StopExerciseTimerStartBreakTimer((int) (BreakTime*60000));
-                bMarkDone.setVisibility(View.INVISIBLE);
-                tExerBreakStatus.setText("Remaining break time");
+                SetBreakMode();
+                StopExerciseTimerStartBreakTimer(BreakTime*60000);
             }
         });
         bNextExercise.setOnClickListener(new View.OnClickListener() {
@@ -175,6 +177,30 @@ public class WorkoutInProgress extends AppCompatActivity {
                 EndWorkoutAlertDialog();
             }
         });
+        if(savedInstanceState != null){
+            GlobalTimerValue = savedInstanceState.getLong("BigCounter");
+            LocalTimerValue = savedInstanceState.getLong("SmolCounter");
+            BreakMode = savedInstanceState.getBoolean("BreakMode");
+            Autoplay = savedInstanceState.getBoolean("Autoplay");
+            StartGlobalTimer(GlobalTimerValue);
+            if(BreakMode){
+                SetBreakMode();
+                StopExerciseTimerStartBreakTimer(LocalTimerValue);
+            }
+            else
+                StartExerciseTimer(LocalTimerValue);
+        }
+        else{
+            StartGlobalTimer(MaxTime*60000);
+            StartExerciseTimer(0);
+        }
+    }
+
+    private void SetBreakMode() {
+        BreakMode = true;
+        bNextExercise.setVisibility(View.VISIBLE);
+        bMarkDone.setVisibility(View.INVISIBLE);
+        tExerBreakStatus.setText("Remaining break time");
     }
 
     private void EndWorkoutAlertDialog() {
@@ -200,18 +226,19 @@ public class WorkoutInProgress extends AppCompatActivity {
     private void ToNextExerciseActivity() {
         if(!TextUtils.isDigitsOnly(etLoad.getText()))
             return;
-        kg_loads[CurrentExerciseNumber] = Byte.parseByte(etLoad.getText().toString());
-
+        //kg_loads[CurrentExerciseNumber] =
+        byte load = Byte.parseByte(etLoad.getText().toString());
         // save current exercise to exercise history
-        dbAdapter.AddExerciseToHistory(CurrentExercise.Id, kg_loads[CurrentExerciseNumber]);
+        dbAdapter.AddExerciseToHistory(CurrentExercise.Id, load);
 
         // if all exercises done
         if(CurrentExerciseNumber == progressBar.getMax() - 1){
             // save workout
             dbAdapter.AddWorkoutToHistory(workout.Id, CalculateScore());
+            dbAdapter.SetLastTrainingDate(dbAdapter.GetAuthorID("Kuba"), new Date());
             // go final activity
             Intent i = new Intent(this, WorkoutSuccess.class);
-            i.putExtra("TimeElapsed", (int)(MaxTime - LastGlobalTimerPosition/60000));
+            i.putExtra("TimeElapsed", (int)(MaxTime - GlobalTimerValue/60000));
             i.putExtra("Score", CalculateScore());
             finish();
             startActivity(i);
@@ -221,7 +248,7 @@ public class WorkoutInProgress extends AppCompatActivity {
             CurrentExerciseNumber++;
             // run exercise timer every new exercise
             LocalTimer.cancel();
-            StartExerciseTimer();
+            StartExerciseTimer(0);
             tExerBreakStatus.setText("Exercise time");
             bNextExercise.setVisibility(View.INVISIBLE);
             bMarkDone.setVisibility(View.VISIBLE);
@@ -248,9 +275,9 @@ public class WorkoutInProgress extends AppCompatActivity {
 
     private int CalculateScore() {
         float score = 0;
-        for(int i=0; i<workout.Exercises.length; i++){
-            score += (workout.Exercises[i].series_number * workout.Exercises[i].breaks_number * kg_loads[i])/100f;
-        }
+//        for(int i=0; i<workout.Exercises.length; i++){
+//            score += (workout.Exercises[i].series_number * workout.Exercises[i].breaks_number * kg_loads[i])/100f;
+//        }
         return Math.round(score);
     }
 

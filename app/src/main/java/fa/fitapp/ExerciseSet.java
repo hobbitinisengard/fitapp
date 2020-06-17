@@ -13,7 +13,6 @@ public class ExerciseSet implements Parcelable {
         this.series_number = (byte)series;
         this.breaks_number = (byte)breaks;
     }
-
     protected ExerciseSet(Parcel in) {
         exerciseID = in.readLong();
         series_number = in.readByte();

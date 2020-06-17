@@ -67,7 +67,6 @@ public class ExerciseRecordRecyclerAdapter extends RecyclerView.Adapter<Exercise
                     e.printStackTrace();
                 }
             }
-
         }
     }
     // convenience method for getting data at click position

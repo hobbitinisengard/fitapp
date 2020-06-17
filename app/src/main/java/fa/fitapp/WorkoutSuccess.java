@@ -19,6 +19,7 @@ public class WorkoutSuccess extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_success);
+
         Intent i = getIntent();
         Time = i.getIntExtra("TimeElapsed", 0);
         Score = i.getIntExtra("Score", 0);
