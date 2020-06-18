@@ -60,7 +60,6 @@ public class TrainingFragment extends Fragment implements WorkoutListRecyclerAda
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
         return root;
-
     }
 
 

@@ -54,7 +54,7 @@ public class FitAppDBAdapter {
                                 new ExerciseSet(5, 8, 3),
                                 new ExerciseSet(6, 5, 4),
                         }));
-                insertNewWorkout(new Workout("Biceps and triceps", "fitapp",
+                insertNewWorkout(new Workout("Biceps and triceps", "Kuba",
                         new ExerciseSet[]{
                                 new ExerciseSet(7, 12, 4),
                                 new ExerciseSet(8, 8, 3),
@@ -208,13 +208,14 @@ public class FitAppDBAdapter {
 
     private void UpdateExercises(long workoutID, Workout w) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        //db.delete("WORKOUT_EXERCISE", "WorkoutID=?", new String[]{String.valueOf(workoutID)});
+        db.delete("WORKOUT_EXERCISE", "WorkoutID=?", new String[]{String.valueOf(workoutID)});
         for(ExerciseSet es : w.Exercises) {
-            contentValues.put("Series", es.series_number);
-            contentValues.put("Breaks", es.breaks_number);
-            db.update("WORKOUT_EXERCISE", contentValues, "WorkoutID=? and ExID=?", new String[]{String.valueOf(workoutID), String.valueOf(es.exerciseID)});
-            contentValues.clear();
+            ContentValues cv = new ContentValues();
+            cv.put("ExID", es.exerciseID);
+            cv.put("Series", es.series_number);
+            cv.put("Breaks", es.breaks_number);
+            cv.put("WorkoutID", workoutID);
+            db.insert("WORKOUT_EXERCISE", null, cv);
         }
     }
 
@@ -230,6 +231,7 @@ public class FitAppDBAdapter {
     private void insertExercises(long workoutID, Workout w){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+
         for(ExerciseSet es : w.Exercises) {
             contentValues.put("WorkoutID", workoutID);
             contentValues.put("ExID", es.exerciseID);
@@ -282,22 +284,11 @@ public class FitAppDBAdapter {
             }
             workoutArray.add(new Workout(cid, name, author, (ExerciseSet[]) ExerciseSet.toArray(new ExerciseSet[ExerciseSet.size()])));
         }
-        for(int i=0; i<workoutArray.size(); i++){
-            SetWorkoutDescriptionStrings(workoutArray.get(i));
-        }
+//        for(int i=0; i<workoutArray.size(); i++){
+//            SetWorkoutDescriptionStrings(workoutArray.get(i));
+//        }
         cursor.close();
         return workoutArray;
-    }
-    public void SetWorkoutDescriptionStrings(Workout w){
-        ArrayList<String> Types = new ArrayList<>();
-        for(int j = 0; j< w.Exercises.length; j++){
-            Exercise e = GetExercise(w.Exercises[j].exerciseID);
-            if(!Types.contains(e.Type.toString())){
-                Types.add(e.Type.toString());
-                w.TypesString += e.Type.toString() + " ";
-            }
-            w.ExerciseList += (j + 1) + ". " + e.Name + " " + w.Exercises[j].series_number + "x"+w.Exercises[j].breaks_number+"\n";
-        }
     }
     public ArrayList<WorkoutExerciseSet> GetNewExerciseActivities() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -408,7 +399,6 @@ public class FitAppDBAdapter {
         contentValues.put("LastWorkout", dateString);
         db.update("USER", contentValues, "_id=?", new String[]{String.valueOf(UserID)});
     }
-
 
     static class MyDBHelper extends SQLiteOpenHelper
     {

@@ -27,7 +27,7 @@ public class ExerciseRecord implements Comparable<ExerciseRecord>{
 
     public Date String2Date(String str){
         Calendar cal = Calendar.getInstance();
-        int year = Integer.parseInt(str.substring(5));
+        int year = Integer.parseInt(str.substring(6));
         int month = Integer.parseInt(str.substring(3,4))-1;
         int day = Integer.parseInt(str.substring(0,2));
         cal.set(year, month, day);

@@ -34,7 +34,7 @@ public class AddNewExerciseActivity extends AppCompatActivity {
         //toolbar.setTitle("New exercise for " + exerciseType.toString());
 
         bAddNew = findViewById(R.id.bAddNewExercise);
-        etYTLink = findViewById(R.id.etName);
+        etYTLink = findViewById(R.id.etLink);
         etDesc = findViewById(R.id.etDesc);
         etName = findViewById(R.id.etName);
 

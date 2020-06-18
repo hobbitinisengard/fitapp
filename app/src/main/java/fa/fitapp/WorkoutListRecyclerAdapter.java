@@ -22,33 +22,33 @@ public class WorkoutListRecyclerAdapter extends RecyclerView.Adapter<WorkoutList
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
     private Context context;
-    // data is passed into the constructor
+
     public WorkoutListRecyclerAdapter(Context context, List<Workout> data) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
     }
 
-    // inflates the row layout from xml when needed
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.recyclerview_row_training, parent, false);
         return new ViewHolder(view);
     }
 
-    // binds the data to the TextView in each row
+    // bind data to row
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Workout workout = mData.get(position);
 
         holder.tAuthor.setText(workout.Author);
         holder.tWorkoutName.setText(workout.Name);
-        holder.tTypes.setText(workout.TypesString);
+        holder.tTypes.setText(workout.TypesString(context));
         holder.bListExercises.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 AlertDialog alertDialog = new AlertDialog.Builder(holder.tWorkoutName.getContext()).create(); //Read Update
                 alertDialog.setTitle(workout.Name);
-                alertDialog.setMessage(workout.ExerciseList);
+                alertDialog.setMessage(workout.ExerciseList(context));
                 alertDialog.setCancelable(true);
                 alertDialog.show();
             }
